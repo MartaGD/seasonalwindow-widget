@@ -25,17 +25,17 @@ const sceneLayers = {
 };
 
 const summerScene = {
-  sky: "../seasonalwindow-widget/assets/summer/sky.png",
-  sea: "../seasonalwindow-widget/assets/summer/sea.png",
-  clouds: "../seasonalwindow-widget/assets/summer/clouds.png",
-  seagulls: "../seasonalwindow-widget/assets/summer/seagulls.png",
-  beach1: "../seasonalwindow-widget/assets/summer/beach1.png",
-  beach2: "../seasonalwindow-widget/assets/summer/beach2.png",
-  palm: "../seasonalwindow-widget/assets/summer/palm.png",
-  ball: "../seasonalwindow-widget/assets/summer/ball.png",
-  crab: "../seasonalwindow-widget/assets/summer/crab.png",
-  window: "../seasonalwindow-widget/assets/summer/window.png",
-  reflection: "../seasonalwindow-widget/assets/summer/reflection.png",
+  sky: "./seasonalwindow-widget/assets/summer/sky.png",
+  sea: "./seasonalwindow-widget/assets/summer/sea.png",
+  clouds: "./seasonalwindow-widget/assets/summer/clouds.png",
+  seagulls: "./seasonalwindow-widget/assets/summer/seagulls.png",
+  beach1: "./seasonalwindow-widget/assets/summer/beach1.png",
+  beach2: "./seasonalwindow-widget/assets/summer/beach2.png",
+  palm: "./seasonalwindow-widget/assets/summer/palm.png",
+  ball: "./seasonalwindow-widget/assets/summer/ball.png",
+  crab: "./seasonalwindow-widget/assets/summer/crab.png",
+  window: "./seasonalwindow-widget/assets/summer/window.png",
+  reflection: "./seasonalwindow-widget/assets/summer/reflection.png",
 };
 
 const seasonSceneMap = {
