@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seasonal Window Widget</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --widget-bg: transparent;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--widget-bg);
+        font-family: Inter, "Segoe UI", Roboto, sans-serif;
+      }
+
+      .widget-root {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.55rem;
+        background: var(--widget-bg);
+      }
+
+      .scene-stack {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .scene-layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      .scene-layer.sky {
+        z-index: 1;
+      }
+
+      .scene-layer.sea {
+        z-index: 2;
+        animation: seaSway 7s ease-in-out infinite;
+        animation-delay: -1.6s;
+      }
+
+      .scene-layer.clouds {
+        z-index: 3;
+        animation: cloudsDrift 30s linear infinite;
+        animation-delay: -7.2s;
+      }
+
+      .scene-layer.seagulls-addon {
+        z-index: 4;
+        transform-origin: center;
+        animation: gullsGlide 10s steps(2, end) infinite;
+        animation-delay: -0.9s;
+      }
+
+      .scene-layer.beach-1 {
+        z-index: 5;
+        animation: beachPulseA 4.5s ease-in-out infinite;
+        animation-delay: -1.2s;
+      }
+
+      .scene-layer.beach-2 {
+        z-index: 6;
+        animation: beachPulseB 4.5s ease-in-out infinite;
+        animation-delay: -1.2s;
+      }
+
+      .scene-layer.ball {
+        z-index: 7;
+        animation: ballBob 8s ease-in-out infinite;
+        animation-delay: -2.2s;
+      }
+
+      .scene-layer.crab {
+        z-index: 7;
+        animation: crabWalk 8s ease-in-out infinite;
+        animation-delay: -4.6s;
+      }
+
+      .scene-layer.palm {
+        z-index: 8;
+        transform-origin: 86% 14%;
+        animation: palmSway 14s ease-in-out infinite;
+        animation-delay: -3.4s;
+      }
+
+      .scene-layer.reflection {
+        z-index: 8;
+        transform-origin: center;
+        animation: reflectionSweep 8s ease-in-out infinite;
+        animation-delay: -1.7s;
+      }
+
+      .scene-layer.window {
+        z-index: 9;
+      }
+
+      .scene-clock {
+        --clock-text: #0e4c64;
+        --clock-bg-top: #fff6be;
+        --clock-bg-bottom: #ffe783;
+        --clock-border: #0e4c64;
+        --clock-shadow-dark: #f8b23a;
+        --clock-shadow-light: #fff7d2;
+        width: 300px;
+        text-align: center;
+        font-family: "Press Start 2P", "Courier New", monospace;
+        font-size: 0.72rem;
+        line-height: 1.3;
+        letter-spacing: 0.06em;
+        color: var(--clock-text);
+        background: linear-gradient(180deg, var(--clock-bg-top) 0%, var(--clock-bg-bottom) 100%);
+        border: 3px solid var(--clock-border);
+        box-shadow:
+          inset -3px -3px 0 var(--clock-shadow-dark),
+          inset 3px 3px 0 var(--clock-shadow-light),
+          3px 3px 0 var(--clock-border);
+        padding: 0.42rem 0.55rem;
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.55);
+        image-rendering: pixelated;
+        animation: clockBlink 5s steps(2, end) infinite;
+      }
+
+      .scene-clock.theme-summer {
+        --clock-text: #0e4c64;
+        --clock-bg-top: #fff6be;
+        --clock-bg-bottom: #ffe783;
+        --clock-border: #0e4c64;
+        --clock-shadow-dark: #f8b23a;
+        --clock-shadow-light: #fff7d2;
+      }
+
+      .scene-clock.theme-sunset {
+        --clock-text: #5a1a2f;
+        --clock-bg-top: #ffd3aa;
+        --clock-bg-bottom: #ff9f7b;
+        --clock-border: #7d2a3f;
+        --clock-shadow-dark: #f77654;
+        --clock-shadow-light: #ffe4c8;
+      }
+
+      .scene-clock.theme-ocean {
+        --clock-text: #0f3552;
+        --clock-bg-top: #bcecff;
+        --clock-bg-bottom: #7ed4ff;
+        --clock-border: #155079;
+        --clock-shadow-dark: #57b8e8;
+        --clock-shadow-light: #ddf7ff;
+      }
+
+      .scene-clock.theme-mint {
+        --clock-text: #1c4e40;
+        --clock-bg-top: #d8ffe6;
+        --clock-bg-bottom: #9bf4c8;
+        --clock-border: #2a6a54;
+        --clock-shadow-dark: #6bd6a3;
+        --clock-shadow-light: #eefff4;
+      }
+
+      .scene-clock.is-hidden {
+        display: none;
+      }
+
+      @keyframes clockBlink {
+        0%,
+        100% {
+          filter: saturate(1) brightness(1);
+        }
+        50% {
+          filter: saturate(1.08) brightness(1.06);
+        }
+      }
+
+      @keyframes beachPulseA {
+        0%,
+        42%,
+        100% {
+          opacity: 1;
+        }
+        50%,
+        92% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes beachPulseB {
+        0%,
+        42%,
+        100% {
+          opacity: 0;
+        }
+        50%,
+        92% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes cloudsDrift {
+        0% {
+          transform: translateX(7%);
+        }
+        100% {
+          transform: translateX(-7%);
+        }
+      }
+
+      @keyframes seaSway {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-0.8%);
+        }
+      }
+
+      @keyframes gullsGlide {
+        0% {
+          opacity: 0;
+          transform: translate(-120%, 1%) rotate(-1.2deg) scale(0.99);
+        }
+        8% {
+          opacity: 1;
+          transform: translate(-88%, 0.6%) rotate(-1.2deg) scale(0.99);
+        }
+        34% {
+          opacity: 1;
+          transform: translate(12%, -0.45%) rotate(0.95deg) scale(1.01);
+        }
+        42% {
+          opacity: 0;
+          transform: translate(120%, 0.4%) rotate(-1.2deg) scale(0.99);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(120%, 0.4%) rotate(-1.2deg) scale(0.99);
+        }
+      }
+
+      @keyframes palmSway {
+        0%,
+        100% {
+          transform: rotate(0deg) translateX(0) translateY(0);
+        }
+        30% {
+          transform: rotate(-0.45deg) translateX(-0.35%) translateY(-0.1%);
+        }
+        60% {
+          transform: rotate(0.25deg) translateX(0.2%) translateY(0.05%);
+        }
+        80% {
+          transform: rotate(-0.3deg) translateX(-0.2%) translateY(-0.06%);
+        }
+      }
+
+      @keyframes ballBob {
+        0% {
+          opacity: 0;
+          transform: translateX(-18%);
+        }
+        8% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        26.75% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        38% {
+          opacity: 0;
+          transform: translateX(-18%);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(-18%);
+        }
+      }
+
+      @keyframes crabWalk {
+        0% {
+          transform: translateX(34%);
+        }
+        8% {
+          transform: translateX(0);
+        }
+        26.75% {
+          transform: translateX(0);
+        }
+        38% {
+          transform: translateX(34%);
+        }
+        100% {
+          transform: translateX(34%);
+        }
+      }
+
+      @keyframes reflectionSweep {
+        0% {
+          opacity: 0.36;
+          transform: translate(-3%, -2%) scale(1.01);
+        }
+        25% {
+          opacity: 0.82;
+          transform: translate(0.5%, 1.2%) scale(1.005);
+        }
+        50% {
+          opacity: 0.9;
+          transform: translate(3.2%, 3.6%) scale(1);
+        }
+        75% {
+          opacity: 0.82;
+          transform: translate(0.5%, 1.2%) scale(1.005);
+        }
+        100% {
+          opacity: 0.36;
+          transform: translate(-3%, -2%) scale(1.01);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="widget-root" id="widgetRoot">
+      <div class="scene-stack" aria-label="Animated seasonal window scene">
+        <img class="scene-layer sky" src="./assets/summer/sky.png" alt="Sky" />
+        <img class="scene-layer sea" src="./assets/summer/sea.png" alt="Sea" />
+        <img class="scene-layer clouds" src="./assets/summer/clouds.png" alt="Clouds" />
+        <img class="scene-layer seagulls-addon" src="./assets/summer/seagulls.png" alt="Seagulls" />
+        <img class="scene-layer beach beach-1" src="./assets/summer/beach1.png" alt="Beach layer one" />
+        <img class="scene-layer beach beach-2" src="./assets/summer/beach2.png" alt="Beach layer two" />
+        <img class="scene-layer palm" src="./assets/summer/palm.png" alt="Palm" />
+        <img class="scene-layer ball" src="./assets/summer/ball.png" alt="Ball" />
+        <img class="scene-layer crab" src="./assets/summer/crab.png" alt="Crab" />
+        <img class="scene-layer reflection" src="./assets/summer/reflection.png" alt="Window reflection" />
+        <img class="scene-layer window" src="./assets/summer/window.png" alt="Window frame" />
+      </div>
+      <div id="sceneClock" class="scene-clock" aria-live="polite">--:--</div>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const dark = params.get("dark") === "1";
+      const showClock = params.get("clock") !== "0";
+      const clockTheme = params.get("clockTheme") || "summer";
+      const season = params.get("season") || "summer";
+      const bg = "transparent";
+
+      const widgetRoot = document.getElementById("widgetRoot");
+      const clock = document.getElementById("sceneClock");
+
+      document.documentElement.style.setProperty("--widget-bg", bg);
+      document.body.style.background = "transparent";
+
+      if (clock) {
+        clock.classList.add(`theme-${clockTheme}`);
+        clock.classList.toggle("is-hidden", !showClock);
+      }
+
+      function updateClock() {
+        if (!clock) {
+          return;
+        }
+        const now = new Date();
+        clock.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
+
+      // Keep season in URL contract for future seasonal asset sets.
+      widgetRoot.dataset.season = season;
+      widgetRoot.classList.toggle("dark-mode", dark);
+
+      updateClock();
+      window.setInterval(updateClock, 1000);
+    </script>
+  </body>
+</html>
