@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seasonal Window Widget Personalizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="control-panel">
+        <div class="panel-header">
+          <h1>Seasonal Window Widget Personalizer</h1>
+          <p>for Notion by <a href="https://martagd.gumroad.com/" target="_blank" rel="noreferrer">MartaGD</a></p>
+        </div>
+
+        <section class="control-group toggle-card">
+          <div class="btn-group">
+            Light Mode
+            <label class="switch">
+              <input id="darkMode" name="darkMode" type="checkbox" />
+              <span class="slider round"></span>
+            </label>
+            Dark Mode
+          </div>
+        </section>
+
+        <section class="control-group toggle-card">
+          <div class="btn-group">
+            Sin reloj
+            <label class="switch">
+              <input id="showClock" name="showClock" type="checkbox" checked />
+              <span class="slider round"></span>
+            </label>
+            Con reloj
+          </div>
+        </section>
+
+        <section class="control-group">
+          <label for="clockTheme">Clock theme</label>
+          <select id="clockTheme" name="clockTheme">
+            <option value="summer" selected>Summer</option>
+            <option value="sunset">Sunset</option>
+            <option value="ocean">Ocean</option>
+            <option value="mint">Mint</option>
+          </select>
+        </section>
+
+        <section class="control-group">
+          <label for="season">Season</label>
+          <select id="season" name="season">
+            <option value="spring">Spring</option>
+            <option value="summer" selected>Summer</option>
+            <option value="autumn">Autumn</option>
+            <option value="winter">Winter</option>
+          </select>
+        </section>
+
+        <section class="control-group">
+          <label for="urlArea">Generated URL</label>
+          <textarea id="urlArea" name="urlArea" rows="5" readonly></textarea>
+          <button id="copyButton" type="button">Copy URL</button>
+        </section>
+      </aside>
+
+      <section class="preview-panel">
+
+
+          <div class="preview-window">
+            <div class="scene-stack" aria-label="Animated seasonal window scene">
+              <img class="scene-layer sky" src="../seasonalwindow-widget/assets/summer/sky.png" alt="Sky" />
+              <img class="scene-layer sea" src="../seasonalwindow-widget/assets/summer/sea.png" alt="Sea" />
+              <img class="scene-layer clouds" src="../seasonalwindow-widget/assets/summer/clouds.png" alt="Clouds" />
+              <img class="scene-layer seagulls-addon" src="../seasonalwindow-widget/assets/summer/seagulls.png" alt="Seagulls" />
+              <img class="scene-layer beach beach-1" src="../seasonalwindow-widget/assets/summer/beach1.png" alt="Beach layer one" />
+              <img class="scene-layer beach beach-2" src="../seasonalwindow-widget/assets/summer/beach2.png" alt="Beach layer two" />
+              <img class="scene-layer palm" src="../seasonalwindow-widget/assets/summer/palm.png" alt="Palm" />
+              <img class="scene-layer ball" src="../seasonalwindow-widget/assets/summer/ball.png" alt="Ball" />
+              <img class="scene-layer crab" src="../seasonalwindow-widget/assets/summer/crab.png" alt="Crab" />
+              <img class="scene-layer window" src="../seasonalwindow-widget/assets/summer/window.png" alt="Window frame" />
+              <img class="scene-layer reflection" src="../seasonalwindow-widget/assets/summer/reflection.png" alt="Window reflection" />
+            </div>
+            <div id="previewTime" class="scene-clock" aria-live="polite">--:--</div>
+          </div>
+
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
