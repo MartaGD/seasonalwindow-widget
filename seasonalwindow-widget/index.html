@@ -5,51 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Seasonal Window Widget</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+      .scene-layer.sun {
+        z-index: 4;
+      }
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-    <style>
+        z-index: 5;
       :root {
         --widget-bg: transparent;
       }
 
       * {
         box-sizing: border-box;
-      }
+        z-index: 6;
 
       body {
         margin: 0;
         background: var(--widget-bg);
         font-family: Inter, "Segoe UI", Roboto, sans-serif;
-      }
+        z-index: 7;
 
       .widget-root {
         width: 300px;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        z-index: 7;
         gap: 0.55rem;
         background: var(--widget-bg);
       }
-
+        z-index: 8;
       .scene-stack {
         position: relative;
         width: 300px;
         height: 300px;
         overflow: hidden;
-        isolation: isolate;
+        z-index: 8;
       }
 
       .scene-layer {
         position: absolute;
         inset: 0;
-        width: 100%;
+        z-index: 9;
         height: 100%;
         object-fit: cover;
         pointer-events: none;
       }
 
       .scene-layer.sky {
-        z-index: 1;
+        z-index: 10;
       }
 
       .scene-layer.sea {
@@ -60,7 +64,7 @@
 
       .scene-layer.clouds {
         z-index: 3;
-        animation: cloudsDrift 30s linear infinite;
+        animation: cloudsDrift 18s linear infinite;
         animation-delay: -7.2s;
       }
 
@@ -81,6 +85,10 @@
         z-index: 6;
         animation: beachPulseB 4.5s ease-in-out infinite;
         animation-delay: -1.2s;
+      }
+
+      .scene-layer.bunny {
+        z-index: 6;
       }
 
       .scene-layer.ball {
@@ -107,6 +115,53 @@
         transform-origin: center;
         animation: reflectionSweep 8s ease-in-out infinite;
         animation-delay: -1.7s;
+      }
+
+      .scene-stack.season-spring .scene-layer.sea {
+        animation: none;
+      }
+
+      .scene-stack.season-spring .scene-layer.clouds {
+        animation: cloudsDrift 18s linear infinite;
+        animation-delay: -7.2s;
+      }
+
+      .scene-stack.season-spring .scene-layer.sun {
+        animation: springSunArc 60s ease-in-out infinite;
+        animation-delay: -1.2s;
+      }
+
+      .scene-stack.season-spring .scene-layer.seagulls-addon {
+        animation: none;
+      }
+
+      .scene-stack.season-spring .scene-layer.beach-1 {
+        animation: none;
+      }
+
+      .scene-stack.season-spring .scene-layer.beach-2 {
+        animation: springBirdFloat 6s ease-in-out infinite;
+        animation-delay: -1.3s;
+      }
+
+      .scene-stack.season-spring .scene-layer.palm {
+        animation: springButterflyDrift 8s ease-in-out infinite;
+        animation-delay: 0s;
+      }
+
+      .scene-stack.season-spring .scene-layer.ball {
+        animation: springBeeFlight 8s linear infinite;
+        animation-delay: 0s;
+        transform-origin: center center;
+      }
+
+      .scene-stack.season-spring .scene-layer.bunny {
+        animation: springBunnyJourney 12s linear infinite;
+        animation-delay: -1.6s;
+      }
+
+      .scene-stack.season-spring .scene-layer.crab {
+        display: none;
       }
 
       .scene-layer.window {
@@ -173,6 +228,42 @@
         --clock-border: #2a6a54;
         --clock-shadow-dark: #6bd6a3;
         --clock-shadow-light: #eefff4;
+      }
+
+      .scene-clock.theme-spring {
+        --clock-text: #5f2f43;
+        --clock-bg-top: #ffe5ef;
+        --clock-bg-bottom: #ffc3d7;
+        --clock-border: #8a4561;
+        --clock-shadow-dark: #f19ab8;
+        --clock-shadow-light: #fff3f8;
+      }
+
+      .scene-clock.theme-meadow {
+        --clock-text: #234a2f;
+        --clock-bg-top: #e8ffd2;
+        --clock-bg-bottom: #b9f18d;
+        --clock-border: #3f7a4f;
+        --clock-shadow-dark: #8fd160;
+        --clock-shadow-light: #f5ffe9;
+      }
+
+      .scene-clock.theme-dew {
+        --clock-text: #1d4a58;
+        --clock-bg-top: #e6fbff;
+        --clock-bg-bottom: #bfefff;
+        --clock-border: #2f6f85;
+        --clock-shadow-dark: #87cde5;
+        --clock-shadow-light: #f2fcff;
+      }
+
+      .scene-clock.theme-petal {
+        --clock-text: #64422f;
+        --clock-bg-top: #fff1d7;
+        --clock-bg-bottom: #ffd8a3;
+        --clock-border: #8d6443;
+        --clock-shadow-dark: #eab982;
+        --clock-shadow-light: #fff8ea;
       }
 
       .scene-clock.is-hidden {
@@ -334,6 +425,141 @@
           transform: translate(-3%, -2%) scale(1.01);
         }
       }
+
+      @keyframes springSunPulse {
+        0%,
+        100% {
+          transform: scale(1);
+          filter: brightness(1);
+        }
+        50% {
+          transform: scale(1.015);
+          filter: brightness(1.07);
+        }
+      }
+
+      @keyframes springSunArc {
+        0% {
+          transform: translate(-130%, 14%);
+        }
+        25% {
+          transform: translate(-35%, -18%);
+        }
+        50% {
+          transform: translate(130%, 14%);
+        }
+        75% {
+          transform: translate(-35%, -18%);
+        }
+        100% {
+          transform: translate(-130%, 14%);
+        }
+      }
+
+      @keyframes springBirdFloat {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(1.3%, -1%);
+        }
+      }
+
+      @keyframes springButterflyDrift {
+        0% {
+          transform: translate(-110px, 46px) rotate(-6deg);
+        }
+        20% {
+          transform: translate(-72px, 30px) rotate(4deg);
+        }
+        40% {
+          transform: translate(-30px, 12px) rotate(-3deg);
+        }
+        60% {
+          transform: translate(16px, -6px) rotate(5deg);
+        }
+        80% {
+          transform: translate(62px, -24px) rotate(-4deg);
+        }
+        92% {
+          transform: translate(156px, -66px) rotate(4deg);
+        }
+        100% {
+          transform: translate(236px, -118px) rotate(3deg);
+        }
+      }
+
+      @keyframes springBeeFlight {
+        0% {
+          opacity: 1;
+          transform: translate(120px, 100px) scale(0.4) rotate(-8deg);
+        }
+        20% {
+          opacity: 1;
+          transform: translate(84px, 70px) scale(0.34) rotate(4deg);
+        }
+        40% {
+          opacity: 1;
+          transform: translate(48px, 32px) scale(0.28) rotate(-3deg);
+        }
+        60% {
+          opacity: 1;
+          transform: translate(10px, -8px) scale(0.22) rotate(5deg);
+        }
+        80% {
+          opacity: 1;
+          transform: translate(-34px, -54px) scale(0.16) rotate(-4deg);
+        }
+        90% {
+          opacity: 1;
+          transform: translate(-98px, -106px) scale(0.13) rotate(3deg);
+        }
+        96% {
+          opacity: 1;
+          transform: translate(-128px, -136px) scale(0.11) rotate(2deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-168px, -176px) scale(0.1) rotate(2deg);
+        }
+      }
+
+      @keyframes springBunnyJourney {
+        0% {
+          transform: translate(130%, 0) rotate(0deg) scale(1, 1);
+        }
+        8% {
+          transform: translate(108%, 0) rotate(0deg) scale(1, 1);
+        }
+        14% {
+          transform: translate(84%, -3.8%) rotate(-3deg) scale(1.03, 0.97);
+        }
+        20% {
+          transform: translate(60%, 0.6%) rotate(2deg) scale(0.97, 1.03);
+        }
+        26% {
+          transform: translate(34%, -3.2%) rotate(-2.5deg) scale(1.02, 0.98);
+        }
+        32% {
+          transform: translate(12%, 0.5%) rotate(1.4deg) scale(0.98, 1.02);
+        }
+        38% {
+          transform: translate(0%, 0) rotate(0deg) scale(1, 1);
+        }
+        54% {
+          transform: translate(0%, 0) rotate(0deg) scale(1, 1);
+        }
+        70% {
+          transform: translate(-70%, 0) rotate(0deg) scale(1, 1);
+        }
+        80% {
+          transform: translate(-130%, 0) rotate(0deg) scale(1, 1);
+        }
+        100% {
+          transform: translate(-130%, 0) rotate(0deg) scale(1, 1);
+        }
+      }
     </style>
   </head>
   <body>
@@ -342,14 +568,16 @@
         <img class="scene-layer sky" src="./assets/summer/sky.png" alt="Sky" />
         <img class="scene-layer sea" src="./assets/summer/sea.png" alt="Sea" />
         <img class="scene-layer clouds" src="./assets/summer/clouds.png" alt="Clouds" />
+        <img class="scene-layer sun" src="./assets/spring/sun.png" alt="Sun" />
         <img class="scene-layer seagulls-addon" src="./assets/summer/seagulls.png" alt="Seagulls" />
         <img class="scene-layer beach beach-1" src="./assets/summer/beach1.png" alt="Beach layer one" />
         <img class="scene-layer beach beach-2" src="./assets/summer/beach2.png" alt="Beach layer two" />
+        <img class="scene-layer bunny" src="./assets/spring/bunny.png" alt="Bunny" />
         <img class="scene-layer palm" src="./assets/summer/palm.png" alt="Palm" />
         <img class="scene-layer ball" src="./assets/summer/ball.png" alt="Ball" />
         <img class="scene-layer crab" src="./assets/summer/crab.png" alt="Crab" />
-        <img class="scene-layer reflection" src="./assets/summer/reflection.png" alt="Window reflection" />
-        <img class="scene-layer window" src="./assets/summer/window.png" alt="Window frame" />
+        <img class="scene-layer reflection" src="./assets/reflection.png" alt="Window reflection" />
+        <img class="scene-layer window" src="./assets/window.png" alt="Window frame" />
       </div>
       <div id="sceneClock" class="scene-clock" aria-live="polite">--:--</div>
     </main>
@@ -364,6 +592,70 @@
 
       const widgetRoot = document.getElementById("widgetRoot");
       const clock = document.getElementById("sceneClock");
+      const sceneStack = document.querySelector(".scene-stack");
+      const sceneLayers = {
+        sky: document.querySelector(".scene-layer.sky"),
+        sea: document.querySelector(".scene-layer.sea"),
+        clouds: document.querySelector(".scene-layer.clouds"),
+        sun: document.querySelector(".scene-layer.sun"),
+        seagulls: document.querySelector(".scene-layer.seagulls-addon"),
+        beach1: document.querySelector(".scene-layer.beach-1"),
+        beach2: document.querySelector(".scene-layer.beach-2"),
+        bunny: document.querySelector(".scene-layer.bunny"),
+        palm: document.querySelector(".scene-layer.palm"),
+        ball: document.querySelector(".scene-layer.ball"),
+        crab: document.querySelector(".scene-layer.crab"),
+        window: document.querySelector(".scene-layer.window"),
+        reflection: document.querySelector(".scene-layer.reflection"),
+      };
+
+      const summerScene = {
+        sky: "./assets/summer/sky.png",
+        sea: "./assets/summer/sea.png",
+        clouds: "./assets/summer/clouds.png",
+        sun: null,
+        seagulls: "./assets/summer/seagulls.png",
+        beach1: "./assets/summer/beach1.png",
+        beach2: "./assets/summer/beach2.png",
+        bunny: null,
+        palm: "./assets/summer/palm.png",
+        ball: "./assets/summer/ball.png",
+        crab: "./assets/summer/crab.png",
+        window: "./assets/window.png",
+        reflection: "./assets/reflection.png",
+      };
+
+      const springScene = {
+        sky: "./assets/spring/sky.png",
+        sea: "./assets/spring/hill.png",
+        clouds: "./assets/spring/clouds.png",
+        sun: "./assets/spring/sun.png",
+        seagulls: "./assets/spring/flowers.png",
+        beach1: "./assets/spring/tree.png",
+        beach2: "./assets/spring/bird.png",
+        bunny: "./assets/spring/bunny.png",
+        palm: "./assets/spring/butterfly.png",
+        ball: "./assets/spring/bee.png",
+        crab: null,
+        window: "./assets/window.png",
+        reflection: "./assets/reflection.png",
+      };
+
+      const seasonSceneMap = {
+        spring: springScene,
+        summer: summerScene,
+        autumn: summerScene,
+        winter: summerScene,
+      };
+
+      const springChainLayerKeys = ["ball", "palm"];
+      const springChainAnimationByLayer = {
+        ball: "springBeeFlight",
+        palm: "springButterflyDrift",
+      };
+      const springChainGapMs = 2000;
+      let springChainTimer = null;
+      let springChainToken = 0;
 
       document.documentElement.style.setProperty("--widget-bg", bg);
       document.body.style.background = "transparent";
@@ -371,6 +663,124 @@
       if (clock) {
         clock.classList.add(`theme-${clockTheme}`);
         clock.classList.toggle("is-hidden", !showClock);
+      }
+
+      function applySceneForSeason(seasonKey) {
+        const scene = seasonSceneMap[seasonKey] || seasonSceneMap.summer;
+
+        if (sceneStack) {
+          sceneStack.classList.remove("season-spring", "season-summer", "season-autumn", "season-winter");
+          sceneStack.classList.add(`season-${seasonKey}`);
+        }
+
+        Object.entries(sceneLayers).forEach(([layerKey, element]) => {
+          if (!element) {
+            return;
+          }
+
+          const layerSrc = scene[layerKey];
+          if (!layerSrc) {
+            element.style.display = "none";
+            return;
+          }
+
+          element.style.display = "block";
+          element.src = layerSrc;
+        });
+      }
+
+      function restartElementAnimation(element) {
+        if (!element) {
+          return;
+        }
+        element.style.animation = "none";
+        void element.offsetWidth;
+        element.style.animation = "";
+      }
+
+      function setSpringChainLayerState(layerKey, state) {
+        const element = sceneLayers[layerKey];
+        if (!element) {
+          return;
+        }
+        element.style.animationIterationCount = "1";
+        element.style.animationFillMode = "both";
+        element.style.animationPlayState = state;
+      }
+
+      function resetSpringChainStyles() {
+        springChainLayerKeys.forEach((layerKey) => {
+          const element = sceneLayers[layerKey];
+          if (!element) {
+            return;
+          }
+          element.style.animationIterationCount = "";
+          element.style.animationFillMode = "";
+          element.style.animationPlayState = "";
+        });
+      }
+
+      function resetSpringChainScheduler() {
+        springChainToken += 1;
+        if (springChainTimer) {
+          window.clearTimeout(springChainTimer);
+          springChainTimer = null;
+        }
+      }
+
+      function runSpringChainStep(layerIndex, token) {
+        if (token !== springChainToken) {
+          return;
+        }
+        if (season !== "spring") {
+          resetSpringChainScheduler();
+          resetSpringChainStyles();
+          return;
+        }
+
+        const activeLayerKey = springChainLayerKeys[layerIndex % springChainLayerKeys.length];
+        const activeLayer = sceneLayers[activeLayerKey];
+        if (!activeLayer || activeLayer.style.display === "none") {
+          springChainTimer = window.setTimeout(() => {
+            runSpringChainStep(layerIndex + 1, token);
+          }, springChainGapMs);
+          return;
+        }
+
+        springChainLayerKeys.forEach((layerKey) => {
+          setSpringChainLayerState(layerKey, "paused");
+        });
+
+        restartElementAnimation(activeLayer);
+        setSpringChainLayerState(activeLayerKey, "running");
+
+        const expectedAnimationName = springChainAnimationByLayer[activeLayerKey];
+        activeLayer.addEventListener(
+          "animationend",
+          (event) => {
+            if (token !== springChainToken || event.animationName !== expectedAnimationName) {
+              return;
+            }
+
+            setSpringChainLayerState(activeLayerKey, "paused");
+            springChainTimer = window.setTimeout(() => {
+              runSpringChainStep(layerIndex + 1, token);
+            }, springChainGapMs);
+          },
+          { once: true },
+        );
+      }
+
+      function syncSpringBeeButterflyChain() {
+        resetSpringChainScheduler();
+
+        if (season !== "spring") {
+          resetSpringChainStyles();
+          return;
+        }
+
+        const token = springChainToken;
+        runSpringChainStep(0, token);
       }
 
       function updateClock() {
@@ -384,6 +794,8 @@
       // Keep season in URL contract for future seasonal asset sets.
       widgetRoot.dataset.season = season;
       widgetRoot.classList.toggle("dark-mode", dark);
+      applySceneForSeason(season);
+      syncSpringBeeButterflyChain();
 
       updateClock();
       window.setInterval(updateClock, 1000);
